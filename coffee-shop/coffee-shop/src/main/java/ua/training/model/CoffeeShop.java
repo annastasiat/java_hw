@@ -1,7 +1,6 @@
 package ua.training.model;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /*
 * Фургон кофе.
@@ -14,13 +13,13 @@ import java.util.stream.Collectors;
 * */
 
 public class CoffeeShop {
-    private List<Coffee> coffeeList = new ArrayList<>();
+    private Set<Coffee> coffeeList = new HashSet<>();
     private final int VOLUME = 200;
 
-    public List<Coffee> getCoffeeByPriceRange(int minPrice, int maxPrice){
-        List<Coffee> coffeeInPriceRange = new ArrayList<>();
+    public Set<Coffee> getCoffeeByPriceRange(int minPrice, int maxPrice){
+        Set<Coffee> coffeeInPriceRange = new HashSet<>();
         for(Coffee coffee:coffeeList){
-            int price = coffee.getCoffeType().getPrice();
+            int price = coffee.getPrice();
             if(price>=minPrice&&price<=maxPrice){
                 coffeeInPriceRange.add(coffee);
             }
@@ -28,8 +27,8 @@ public class CoffeeShop {
         return coffeeInPriceRange;
     }
 
-    public List<Coffee> getCoffeeByAmountRange(int minAmount, int maxAmount){
-        List<Coffee> coffeeInAmountRange = new ArrayList<>();
+    public Set<Coffee> getCoffeeByAmountRange(int minAmount, int maxAmount){
+        Set<Coffee> coffeeInAmountRange = new HashSet<>();
         for(Coffee coffee:coffeeList){
             int amount = coffee.getAmount();
             if(amount>=minAmount&&amount<=maxAmount){
@@ -39,23 +38,40 @@ public class CoffeeShop {
         return coffeeInAmountRange;
     }
 
-    public List<Coffee> sortByPrice() {
-        return Collections.sort(coffeeList, (a, b) ->
-                a.getCoffeType().getPrice() < b.getCoffeType().getPrice() ? -1:
-                        a.getCoffeType().getPrice() == b.getCoffeType().getPrice()?0:1);
+    public List<Coffee> sortByPrice() { //no deep copy
+        List<Coffee> sortedCoffeeList = new ArrayList<>(coffeeList);
+        sortedCoffeeList.sort(Comparator.comparingInt(Product::getPrice));
+        return sortedCoffeeList;
 
     }
 
-    public List<Coffee> sortByWeight() {
+    public List<Coffee> sortByWeight() { //no deep copy
+        List<Coffee> sortedCoffeeList = new ArrayList<>(coffeeList);
+        sortedCoffeeList.sort(Comparator.comparingInt(Product::getPrice));
+        return sortedCoffeeList;
 
     }
 
-    public void loadCoffee(){
-
+    public void loadCoffee(Coffee ... coffees){
+        for(Coffee coffee:coffees){
+            if(isAvailable(coffee.getCoffeeType())){
+                coffeeList.
+            }
+        }
     }
 
-    public void sell(Coffee coffee){
-        coffeeTypesAndAmounts.remove(coffee);
+    public boolean isAvailable(CoffeeType coffeeType){
+        return coffeeList.contains(new Coffee(coffeeType));
+    }
+
+    public void sell(CoffeeType coffeeToSell){
+        if()
+        for(Coffee coffee: coffeeList){
+            if(coffee.getCoffeeType().equals(coffeeToSell)){
+                coffee.setAmount(coffee.getAmount()-1);
+            }
+
+        }
     }
 
 

@@ -1,6 +1,6 @@
 package ua.training.model;
 
-public class CoffeTypes extends Product {
+public class CoffeeType {
     private String origin;
     private CoffeeState state;
     private String weightPerPiece;

@@ -10,17 +10,23 @@ package ua.training.model;
 * Найти товар в фургоне, соответствующий заданному диапазону параметров качества.
 * */
 
-public class Coffee{
-    private CoffeTypes coffeType;
+import java.util.Objects;
+
+public class Coffee  extends Product{
+    private CoffeeType coffeeType;
     private int amount;
 
-
-    public CoffeTypes getCoffeType() {
-        return coffeType;
+    public Coffee(CoffeeType coffeeType){
+        this.coffeeType = coffeeType;
+        this.amount = 0;
     }
 
-    public void setCoffeType(CoffeTypes coffeType) {
-        this.coffeType = coffeType;
+    public CoffeeType getCoffeeType() {
+        return coffeeType;
+    }
+
+    public void setCoffeeType(CoffeeType coffeeType) {
+        this.coffeeType = coffeeType;
     }
 
     public int getAmount() {
@@ -29,6 +35,23 @@ public class Coffee{
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public void addItems(int amount) {
+        this.amount = this.amount + amount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Coffee coffee = (Coffee) o;
+        return Objects.equals(coffeeType, coffee.coffeeType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(coffeeType);
     }
 }
 
