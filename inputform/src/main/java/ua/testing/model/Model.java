@@ -20,6 +20,10 @@ public class Model {
     private String skype;
 
     private Address address;
+    private String addresString;
+    private Date noteCreationDate;
+    private Date lastModificationDate;
+
 
     public String getAddresString() {
         return addresString;
@@ -28,11 +32,6 @@ public class Model {
     public void setAddresString(String addresString) {
         this.addresString = addresString;
     }
-
-    private String addresString;
-    private Date noteCreationDate;
-    private Date lastModificationDate;
-
 
     public String getLogin() {
         return login;
