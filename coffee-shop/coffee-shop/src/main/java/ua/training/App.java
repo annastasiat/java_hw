@@ -8,9 +8,6 @@ public class App
 {
     public static void main( String[] args )
     {
-
-        System.out.println( "Привіт" );
-
         new Controller(new View(), new Model()).processUser();
     }
 }
