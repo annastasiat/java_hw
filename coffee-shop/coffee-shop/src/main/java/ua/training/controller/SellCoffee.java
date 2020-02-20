@@ -19,9 +19,10 @@ public class SellCoffee {
         this.uc = new UtilityController(sc, view);
     }
 
+
     public void showAvailableProducts() {
         List<DBCoffeeShop> coffeeRecords = shop.getCoffeeProductsRecords();
-        view.printCoffeeRecords(coffeeRecords);
+        printCoffeeRecords(coffeeRecords);
     }
 
 
@@ -32,6 +33,8 @@ public class SellCoffee {
         DBCoffeeShop coffeeRecord = getOrderRecord();
 
         sell(coffeeRecord);
+
+        showAvailableProducts();
 
         view.printMessage(View.bundle.getString(MessageConstants.BYE_CUSTOMER));
     }
@@ -55,6 +58,20 @@ public class SellCoffee {
         } catch (NoRecordInDBException e) {
             view.printMessage(View.bundle.getString(MessageConstants.NO_SUCH_PRODUCT));
             return getOrderRecord();
+        }
+    }
+
+    public void printCoffeeRecords(List<DBCoffeeShop> records) {
+        for (DBCoffeeShop record : records) {
+            Coffee coffee = (Coffee) record.getProduct();
+            view.printMessage(view.concatStrings(View.bundle.getString(MessageConstants.ORIGIN), coffee.getOrigin()));
+            view.printMessage(view.concatStrings(View.bundle.getString(MessageConstants.STATE), coffee.getState().toString()));
+            view.printMessage(view.concatStrings(View.bundle.getString(MessageConstants.PRICE),
+                    Double.toString(coffee.getPriceDouble()), View.bundle.getString(MessageConstants.CURRENCY)));
+            view.printMessage(view.concatStrings(View.bundle.getString(MessageConstants.WEIGHT_PER_PIECE), Integer.toString(coffee.getWeightPerPiece())));
+            view.printMessage(view.concatStrings(View.bundle.getString(MessageConstants.AMOUNT), Integer.toString(record.getAmount())));
+
+            view.printMessage(MessageConstants.BLANCK_LINE);
         }
     }
 }

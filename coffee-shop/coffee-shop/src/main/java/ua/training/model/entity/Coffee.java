@@ -27,18 +27,4 @@ public class Coffee extends Product {
         return weightPerPiece;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Coffee that = (Coffee) o;
-        return weightPerPiece == that.weightPerPiece &&
-                Objects.equals(origin, that.origin) &&
-                state == that.state && this.getPrice() == that.getPrice();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(origin, state, weightPerPiece, getPrice());
-    }
 }

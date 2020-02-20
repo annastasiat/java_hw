@@ -1,9 +1,6 @@
 package ua.training.view;
 
-import ua.training.model.entity.Coffee;
-import ua.training.model.entity.DBCoffeeShop;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -28,20 +25,6 @@ public class View {
             concatString.append(str);
         }
         return concatString.toString();
-    }
-
-    public void printCoffeeRecords(List<DBCoffeeShop> records) {
-        for (DBCoffeeShop record : records) {
-            Coffee coffee = (Coffee) record.getProduct();
-            System.out.println(concatStrings(bundle.getString(MessageConstants.ORIGIN), coffee.getOrigin()));
-            System.out.println(concatStrings(bundle.getString(MessageConstants.STATE), coffee.getState().toString()));
-            System.out.println(concatStrings(bundle.getString(MessageConstants.PRICE),
-                    Double.toString(coffee.getPriceDouble()), bundle.getString(MessageConstants.CURRENCY)));
-            System.out.println(concatStrings(bundle.getString(MessageConstants.WEIGHT_PER_PIECE), Integer.toString(coffee.getWeightPerPiece())));
-            System.out.println(concatStrings(bundle.getString(MessageConstants.AMOUNT), Integer.toString(record.getAmount())));
-
-            System.out.println(MessageConstants.BLANCK_LINE);
-        }
     }
 
 }
