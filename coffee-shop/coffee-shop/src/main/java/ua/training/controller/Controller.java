@@ -18,8 +18,7 @@ public class Controller {
     public void processUser() {
         Scanner sc = new Scanner(System.in);
         CoffeeShop shop = model.getCoffeeShop();
-        SellCoffee sellCoffee =
-                new SellCoffee(view, shop, sc);
+        SellCoffee sellCoffee = new SellCoffee(view, shop, sc);
         sellCoffee.workWithCustomer();
     }
 

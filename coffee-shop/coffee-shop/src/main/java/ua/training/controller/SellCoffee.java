@@ -11,13 +11,11 @@ import java.util.Scanner;
 public class SellCoffee {
     private View view;
     private CoffeeShop shop;
-    private Scanner sc;
     private UtilityController uc;
 
     public SellCoffee(View view, CoffeeShop shop, Scanner sc) {
         this.view = view;
         this.shop = shop;
-        this.sc = sc;
         this.uc = new UtilityController(sc, view);
     }
 
@@ -27,29 +25,30 @@ public class SellCoffee {
     }
 
 
-
-    public void workWithCustomer(){
+    public void workWithCustomer() {
         view.printMessage(View.bundle.getString(MessageConstants.GREET_CUSTOMER));
         showAvailableProducts();
-        sell();
-        view.printMessage(View.bundle.getString(MessageConstants.BYE_CUSTOMER));
-    }
-
-    public void sell() {
 
         DBCoffeeShop coffeeRecord = getOrderRecord();
 
+        sell(coffeeRecord);
+
+        view.printMessage(View.bundle.getString(MessageConstants.BYE_CUSTOMER));
+    }
+
+    private void sell(DBCoffeeShop coffeeRecord) {
         try {
-            shop.sell(coffeeRecord, uc.inputIntValueWithScanner(
+            shop.sell(coffeeRecord, uc.inputIntValue(
                     View.bundle.getString(MessageConstants.INPUT_AMOUNT)));
         } catch (NoProductLeftException e) {
             view.printMessage(View.bundle.getString(MessageConstants.NO_SUCH_PRODUCT_LEFT));
-            sell();
+            sell(coffeeRecord);
         }
     }
-    public DBCoffeeShop getOrderRecord() {
 
-        String[] order = uc.inputOrderWithScannerAndMatch(View.bundle.getString(MessageConstants.INPUT_ORDER));
+    private DBCoffeeShop getOrderRecord() {
+
+        String[] order = uc.inputOrderAndMatch(View.bundle.getString(MessageConstants.INPUT_ORDER));
 
         try {
             return shop.getCoffeeInDB(order[0], CoffeeState.valueOf(order[1].toUpperCase()));

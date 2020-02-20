@@ -16,20 +16,19 @@ public class UtilityController {
         this.view = view;
     }
 
-    String[] inputOrderWithScannerAndMatch(String message) {
+    String[] inputOrderAndMatch(String message) {
         view.printMessage(message);
         Pattern orderPattern = Pattern.compile(View.bundle.getString(MessageConstants.ORDER_REGEX));
-        String res;
+        Matcher matcher;
 
-        while (!(scanner.hasNextLine() && orderPattern.matcher(res = scanner.nextLine()).matches())) {
+        while (!(scanner.hasNextLine() && (matcher = orderPattern.matcher(scanner.nextLine())).matches())) {
             view.printMessage(View.bundle.getString(MessageConstants.WRONG_INPUT));
         }
 
-        Matcher matcher = orderPattern.matcher(res);
         return new String[]{matcher.group(1), matcher.group(2)};
     }
 
-    public int inputIntValueWithScanner(String message) {
+    public int inputIntValue(String message) {
         view.printMessage(message);
         while (!scanner.hasNextInt()) {
             view.printMessage(MessageConstants.WRONG_INPUT);

@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class Coffee extends Product {
 
-    private String origin;
-    private CoffeeState state;
-    private int weightPerPiece;
+    private final String origin;
+    private final CoffeeState state;
+    private final int weightPerPiece;
 
     public Coffee(String origin, CoffeeState state, int weightPerPiece, int price) {
         super(price);
@@ -19,24 +19,12 @@ public class Coffee extends Product {
         return origin;
     }
 
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
     public CoffeeState getState() {
         return state;
     }
 
-    public void setState(CoffeeState state) {
-        this.state = state;
-    }
-
     public int getWeightPerPiece() {
         return weightPerPiece;
-    }
-
-    public void setWeightPerPiece(int weightPerPiece) {
-        this.weightPerPiece = weightPerPiece;
     }
 
     @Override

@@ -18,6 +18,5 @@ public interface MessageConstants {
     public static final String AMOUNT = "amount";
     public static final String WEIGHT_PER_PIECE = "weight.per.piece";
     public static final String ORDER_REGEX = "order.regex";
-    public static final String AMOUNT_REGEX = "amount.regex";
 
 }

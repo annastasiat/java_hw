@@ -30,25 +30,13 @@ public class View {
         return concatString.toString();
     }
 
-
-    public void printCoffeeRecord(DBCoffeeShop record) {
-        Coffee coffee = (Coffee) record.getProduct();
-        System.out.println(concatStrings(bundle.getString(MessageConstants.ORIGIN), coffee.getOrigin()));
-        System.out.println(concatStrings(bundle.getString(MessageConstants.STATE), coffee.getState().toString()));
-        System.out.println(concatStrings(bundle.getString(MessageConstants.PRICE),
-                Integer.toString(coffee.getPrice()), bundle.getString(MessageConstants.CURRENCY)));
-        System.out.println(concatStrings(bundle.getString(MessageConstants.WEIGHT_PER_PIECE), Integer.toString(coffee.getWeightPerPiece())));
-        System.out.println(concatStrings(bundle.getString(MessageConstants.AMOUNT), Integer.toString(record.getAmount())));
-
-    }
-
     public void printCoffeeRecords(List<DBCoffeeShop> records) {
         for (DBCoffeeShop record : records) {
             Coffee coffee = (Coffee) record.getProduct();
             System.out.println(concatStrings(bundle.getString(MessageConstants.ORIGIN), coffee.getOrigin()));
             System.out.println(concatStrings(bundle.getString(MessageConstants.STATE), coffee.getState().toString()));
             System.out.println(concatStrings(bundle.getString(MessageConstants.PRICE),
-                    Integer.toString(coffee.getPrice()), bundle.getString(MessageConstants.CURRENCY)));
+                    Double.toString(coffee.getPriceDouble()), bundle.getString(MessageConstants.CURRENCY)));
             System.out.println(concatStrings(bundle.getString(MessageConstants.WEIGHT_PER_PIECE), Integer.toString(coffee.getWeightPerPiece())));
             System.out.println(concatStrings(bundle.getString(MessageConstants.AMOUNT), Integer.toString(record.getAmount())));
 
