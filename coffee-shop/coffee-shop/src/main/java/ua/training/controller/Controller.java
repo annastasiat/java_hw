@@ -2,6 +2,7 @@ package ua.training.controller;
 
 import ua.training.model.entity.CoffeeShop;
 import ua.training.model.Model;
+import ua.training.model.entity.LoadTypes;
 import ua.training.view.View;
 
 import java.util.Scanner;
@@ -18,9 +19,8 @@ public class Controller {
     public void processUser() {
         Scanner sc = new Scanner(System.in);
         CoffeeShop shop = model.getCoffeeShop();
+        shop.loadProducts(LoadTypes.ORDINARY_LOAD);
         SellCoffee sellCoffee = new SellCoffee(view, shop, sc);
         sellCoffee.workWithCustomer();
     }
-
-
 }

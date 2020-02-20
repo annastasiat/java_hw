@@ -5,13 +5,19 @@ public class Product {
      * Цена в копейках
      */
     private int price;
+    private int amount;
 
-    public Product(int price) {
+    public Product(int price, int amount) {
         this.price = price;
+        this.amount = amount;
     }
 
     public int getPrice() {
         return price;
+    }
+
+    public int getAmount() {
+        return amount;
     }
 
     /**
@@ -23,5 +29,9 @@ public class Product {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }

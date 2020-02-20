@@ -21,8 +21,8 @@ public class SellCoffee {
 
 
     public void showAvailableProducts() {
-        List<DBCoffeeShop> coffeeRecords = shop.getCoffeeProductsRecords();
-        printCoffeeRecords(coffeeRecords);
+        List<Product> coffeeProducts = shop.getCoffeeProducts();
+        printCoffeeProducts(coffeeProducts);
     }
 
 
@@ -30,7 +30,7 @@ public class SellCoffee {
         view.printMessage(View.bundle.getString(MessageConstants.GREET_CUSTOMER));
         showAvailableProducts();
 
-        DBCoffeeShop coffeeRecord = getOrderRecord();
+        Product coffeeRecord = getOrderRecord();
 
         sell(coffeeRecord);
 
@@ -39,7 +39,7 @@ public class SellCoffee {
         view.printMessage(View.bundle.getString(MessageConstants.BYE_CUSTOMER));
     }
 
-    private void sell(DBCoffeeShop coffeeRecord) {
+    private void sell(Product coffeeRecord) {
         try {
             shop.sell(coffeeRecord, uc.inputIntValue(
                     View.bundle.getString(MessageConstants.INPUT_AMOUNT)));
@@ -49,27 +49,27 @@ public class SellCoffee {
         }
     }
 
-    private DBCoffeeShop getOrderRecord() {
+    private Product getOrderRecord() {
 
         String[] order = uc.inputOrderAndMatch(View.bundle.getString(MessageConstants.INPUT_ORDER));
 
         try {
-            return shop.getCoffeeInDB(order[0], CoffeeState.valueOf(order[1].toUpperCase()));
+            return shop.getCoffee(order[0], CoffeeState.valueOf(order[1].toUpperCase()));
         } catch (NoRecordInDBException e) {
             view.printMessage(View.bundle.getString(MessageConstants.NO_SUCH_PRODUCT));
             return getOrderRecord();
         }
     }
 
-    public void printCoffeeRecords(List<DBCoffeeShop> records) {
-        for (DBCoffeeShop record : records) {
-            Coffee coffee = (Coffee) record.getProduct();
+    public void printCoffeeProducts(List<Product> products) {
+        for (Product product : products) {
+            Coffee coffee = (Coffee) product;
             view.printMessage(view.concatStrings(View.bundle.getString(MessageConstants.ORIGIN), coffee.getOrigin()));
             view.printMessage(view.concatStrings(View.bundle.getString(MessageConstants.STATE), coffee.getState().toString()));
             view.printMessage(view.concatStrings(View.bundle.getString(MessageConstants.PRICE),
-                    Double.toString(coffee.getPriceDouble()), View.bundle.getString(MessageConstants.CURRENCY)));
+                    String.format("%.2f", coffee.getPriceDouble()), View.bundle.getString(MessageConstants.CURRENCY)));
             view.printMessage(view.concatStrings(View.bundle.getString(MessageConstants.WEIGHT_PER_PIECE), Integer.toString(coffee.getWeightPerPiece())));
-            view.printMessage(view.concatStrings(View.bundle.getString(MessageConstants.AMOUNT), Integer.toString(record.getAmount())));
+            view.printMessage(view.concatStrings(View.bundle.getString(MessageConstants.AMOUNT), Integer.toString(coffee.getAmount())));
 
             view.printMessage(MessageConstants.BLANCK_LINE);
         }

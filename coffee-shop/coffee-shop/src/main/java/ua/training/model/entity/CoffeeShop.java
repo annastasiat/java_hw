@@ -19,25 +19,31 @@ public class CoffeeShop implements Shop {
      * Поле денег в кассе
      */
     private int money;
+    private List<Product> coffeeShopProducts;
 
     public CoffeeShop() {
         this.money = 0;
+        this.coffeeShopProducts = new ArrayList<>();
+    }
+
+    public void loadProducts(List<Product> newProducts) {
+        coffeeShopProducts.addAll(newProducts);
     }
 
     /**
      * Получение кофе из всех продуктов
+     *
      * @return Список записей из DBCoffeeShop, поле Product которого имеет тип Coffee
-     * @see DBCoffeeShop
      * @see Coffee
      */
-    public List<DBCoffeeShop> getCoffeeProductsRecords() {
-        List<DBCoffeeShop> coffeeRecords = new ArrayList<>();
-        for (DBCoffeeShop record : DBCoffeeShop.values()) {
-            if (record.getProduct() instanceof Coffee) {
-                coffeeRecords.add(record);
+    public List<Product> getCoffeeProducts() {
+        List<Product> coffeeProducts = new ArrayList<>();
+        for (Product product : coffeeShopProducts) {
+            if (product instanceof Coffee) {
+                coffeeProducts.add(product);
             }
         }
-        return coffeeRecords;
+        return coffeeProducts;
     }
 
     /**
@@ -46,18 +52,17 @@ public class CoffeeShop implements Shop {
      * @param minPrice нижняя граница диапазона цены (в копейках)
      * @param maxPrice верхняя граница диапазона цены (в копейках)
      * @return Список записей из DBCoffeeShop, поле Product которого имеет тип Coffee с ценой в заданном диапазоне
-     * @see DBCoffeeShop
      * @see Coffee
      */
-    public List<DBCoffeeShop> getCoffeeByPriceRange(int minPrice, int maxPrice) {
-        List<DBCoffeeShop> records = new ArrayList<>();
-        for (DBCoffeeShop record : getCoffeeProductsRecords()) {
-            Coffee coffee = (Coffee) record.getProduct();
+    public List<Product> getCoffeeByPriceRange(int minPrice, int maxPrice) {
+        List<Product> products = new ArrayList<>();
+        for (Product product : getCoffeeProducts()) {
+            Coffee coffee = (Coffee) product;
             if (coffee.getPrice() >= minPrice && coffee.getPrice() <= maxPrice) {
-                records.add(record);
+                products.add(product);
             }
         }
-        return records;
+        return products;
     }
 
     /**
@@ -66,39 +71,35 @@ public class CoffeeShop implements Shop {
      * @param minAmount нижняя граница диапазона
      * @param maxAmount верхняя граница диапазона
      * @return Список записей из DBCoffeeShop, поле Product которого имеет тип Coffee,
-     * а поле Amount находится в заданном диапазоне (включительно)
-     * @see DBCoffeeShop
      * @see Coffee
      */
-    public List<DBCoffeeShop> getCoffeeByAmountRange(int minAmount, int maxAmount) {
-        List<DBCoffeeShop> records = new ArrayList<>();
-        for (DBCoffeeShop record : getCoffeeProductsRecords()) {
-            if (record.getAmount() >= minAmount && record.getAmount() <= maxAmount) {
-                records.add(record);
+    public List<Product> getCoffeeByAmountRange(int minAmount, int maxAmount) {
+        List<Product> products = new ArrayList<>();
+        for (Product product : getCoffeeProducts()) {
+            if (product.getAmount() >= minAmount && product.getAmount() <= maxAmount) {
+                products.add(product);
             }
         }
-        return records;
+        return products;
     }
 
     /**
      * @return Отсортированный список записей из DBCoffeeShop в соответствии с соотношением цена - вес
-     * @see DBCoffeeShop
      */
-    public List<DBCoffeeShop> sortByPriceAndWeight() {
-        List<DBCoffeeShop> sortedRecords = getCoffeeProductsRecords();
-        sortedRecords.sort(Comparator.comparingDouble(x ->
-                (double) ((Coffee) x.getProduct()).getWeightPerPiece() / x.getProduct().getPrice()));
-        return sortedRecords;
+    public List<Product> sortByPriceAndWeight() {
+        List<Product> sortedProducts = getCoffeeProducts();
+        sortedProducts.sort(Comparator.comparingDouble(x ->
+                (double) ((Coffee) x).getWeightPerPiece() / x.getPrice()));
+        return sortedProducts;
     }
 
     /**
-     * @param record запись пробукта в DBCoffeeShop
-     * @param amount количество
+     * @param product запись пробукта в DBCoffeeShop
+     * @param amount  количество
      * @return доступен ли данный продукт в данном количестве
-     * @see DBCoffeeShop
      */
-    public boolean isAvailableAmount(DBCoffeeShop record, int amount) {
-        return record.getAmount() >= amount;
+    public boolean isAvailableAmount(Product product, int amount) {
+        return product.getAmount() >= amount;
     }
 
 
@@ -110,13 +111,12 @@ public class CoffeeShop implements Shop {
      * @see CoffeeState
      * @see NoRecordInDBException
      */
-    public DBCoffeeShop getCoffeeInDB(String origin, CoffeeState coffeeState) throws NoRecordInDBException {
-        List<DBCoffeeShop> coffeeRecords = getCoffeeProductsRecords();
-        for (DBCoffeeShop record : coffeeRecords) {
-            Coffee coffee = (Coffee) record.getProduct();
+    public Product getCoffee(String origin, CoffeeState coffeeState) throws NoRecordInDBException {
+        for (Product product : getCoffeeProducts()) {
+            Coffee coffee = (Coffee) product;
             if (coffee.getOrigin().equalsIgnoreCase(origin) &&
                     coffee.getState().toString().equalsIgnoreCase(coffeeState.toString())) {
-                return record;
+                return product;
             }
         }
         throw new NoRecordInDBException();
@@ -125,17 +125,16 @@ public class CoffeeShop implements Shop {
     /**
      * Добавляет деньги в кассу, уменьшает количество продаваемого продукта
      *
-     * @param record запись пробукта в DBCoffeeShop
-     * @param amount       количество для продажи
+     * @param product запись пробукта в DBCoffeeShop
+     * @param amount  количество для продажи
      * @throws NoProductLeftException количество продукта в DBCoffeeShop меньше требуемого
-     * @see DBCoffeeShop
      * @see NoProductLeftException
      */
-    public void sell(DBCoffeeShop record, int amount) throws NoProductLeftException {
-        if (!isAvailableAmount(record, amount)) throw new NoProductLeftException();
+    public void sell(Product product, int amount) throws NoProductLeftException {
+        if (!isAvailableAmount(product, amount)) throw new NoProductLeftException();
         else {
-            record.setAmount(record.getAmount() - amount);
-            money += record.getProduct().getPrice();
+            product.setAmount(product.getAmount() - amount);
+            money += product.getPrice();
         }
     }
 
