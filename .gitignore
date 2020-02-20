@@ -4,3 +4,7 @@ moreorless.iml
 inputform/.idea/
 inputform/target/
 inputform/*.iml
+
+coffee-shop/coffee-shop/.idea/
+coffee-shop/coffee-shop/target/
+coffee-shop/coffee-shop/*.iml
