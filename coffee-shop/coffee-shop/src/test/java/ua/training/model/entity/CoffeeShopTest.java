@@ -1,8 +1,8 @@
 package ua.training.model.entity;
 
 import org.junit.Test;
+import ua.training.exception.NoProductExistException;
 import ua.training.exception.NoProductLeftException;
-import ua.training.exception.NoRecordInDBException;
 
 import java.util.List;
 
@@ -11,30 +11,30 @@ import static org.junit.Assert.*;
 public class CoffeeShopTest {
 
     @Test
-    public void getCoffeeProductsRecordsAllAreCoffee() {
+    public void getCoffeeProductsAllAreCoffee() {
         CoffeeShop shop = new CoffeeShop();
         shop.loadProducts(LoadTypes.ORDINARY_LOAD);
-        List<Product> records = shop.getCoffeeProducts();
-        for (Product record : records) {
-            assertTrue(record instanceof Coffee);
+        List<Product> products = shop.getCoffeeProducts();
+        for (Product product : products) {
+            assertTrue(product instanceof Coffee);
         }
     }
 
     @Test
-    public void getCoffeeProductsRecordsAll() {
+    public void getCoffeeProductsAll() {
         CoffeeShop shop = new CoffeeShop();
         shop.loadProducts(LoadTypes.ORDINARY_LOAD);
-        List<Product> records = shop.getCoffeeProducts();
-        assertEquals(3, records.size());
+        List<Product> products = shop.getCoffeeProducts();
+        assertEquals(3, products.size());
     }
 
     @Test
     public void getCoffeeByPriceRange() {
         CoffeeShop shop = new CoffeeShop();
         shop.loadProducts(LoadTypes.ORDINARY_LOAD);
-        List<Product> records = shop.getCoffeeByPriceRange(23, 45);
-        for (Product record : records) {
-            assertTrue(record.getPrice() >= 23 && record.getPrice() <= 45);
+        List<Product> products = shop.getCoffeeByPriceRange(23, 45);
+        for (Product product : products) {
+            assertTrue(product.getPrice() >= 23 && product.getPrice() <= 45);
         }
     }
 
@@ -42,17 +42,17 @@ public class CoffeeShopTest {
     public void getCoffeeByPriceRangeIncorrectMinMax() {
         CoffeeShop shop = new CoffeeShop();
         shop.loadProducts(LoadTypes.ORDINARY_LOAD);
-        List<Product> records = shop.getCoffeeByPriceRange(23, 20);
-        assertEquals(0, records.size());
+        List<Product> products = shop.getCoffeeByPriceRange(23, 20);
+        assertEquals(0, products.size());
     }
 
     @Test
     public void getCoffeeByAmountRange() {
         CoffeeShop shop = new CoffeeShop();
         shop.loadProducts(LoadTypes.ORDINARY_LOAD);
-        List<Product> records = shop.getCoffeeByAmountRange(23, 45);
-        for (Product record : records) {
-            assertTrue(record.getAmount() >= 23 && record.getAmount() <= 45);
+        List<Product> products = shop.getCoffeeByAmountRange(23, 45);
+        for (Product product : products) {
+            assertTrue(product.getAmount() >= 23 && product.getAmount() <= 45);
         }
     }
 
@@ -60,20 +60,20 @@ public class CoffeeShopTest {
     public void getCoffeeByAmountRangeIncorrectMinMax() {
         CoffeeShop shop = new CoffeeShop();
         shop.loadProducts(LoadTypes.ORDINARY_LOAD);
-        List<Product> records = shop.getCoffeeByAmountRange(23, 20);
-        assertEquals(0, records.size());
+        List<Product> products = shop.getCoffeeByAmountRange(23, 20);
+        assertEquals(0, products.size());
     }
 
     @Test
     public void sortByPriceAndWeight() {
         CoffeeShop shop = new CoffeeShop();
         shop.loadProducts(LoadTypes.ORDINARY_LOAD);
-        List<Product> records = shop.sortByPriceAndWeight();
-        Coffee prevCoffee = (Coffee) records.get(0);
-        double prevCoffeeVal = (double) prevCoffee.getWeightPerPiece() / prevCoffee.getPrice();
-        for (Product record : records) {
-            Coffee coffee = (Coffee) record;
-            double val = (double) coffee.getWeightPerPiece() / coffee.getPrice();
+        List<Product> products = shop.sortByPriceAndWeight();
+        Coffee prevCoffee = (Coffee) products.get(0);
+        double prevCoffeeVal = (double) prevCoffee.getPrice() / prevCoffee.getWeightPerPiece();
+        for (Product product : products) {
+            Coffee coffee = (Coffee) product;
+            double val = (double) coffee.getPrice() / coffee.getWeightPerPiece();
             assertTrue(val >= prevCoffeeVal);
             prevCoffeeVal = val;
         }
@@ -104,20 +104,20 @@ public class CoffeeShopTest {
     }
 
     @Test
-    public void getCoffeeRecord() {
+    public void getCoffeeProduct() {
         CoffeeShop shop = new CoffeeShop();
         shop.loadProducts(LoadTypes.ORDINARY_LOAD);
         try {
             assertEquals(LoadTypes.ORDINARY_LOAD.get(0),
                     shop.getCoffee(((Coffee) LoadTypes.ORDINARY_LOAD.get(0)).getOrigin(),
                             ((Coffee) LoadTypes.ORDINARY_LOAD.get(0)).getState()));
-        } catch (NoRecordInDBException e) {
+        } catch (NoProductExistException e) {
             fail();
         }
     }
 
-    @Test(expected = NoRecordInDBException.class)
-    public void getCoffeeRecordException() throws NoRecordInDBException {
+    @Test(expected = NoProductExistException.class)
+    public void getCoffeeException() throws NoProductExistException {
         CoffeeShop shop = new CoffeeShop();
         shop.loadProducts(LoadTypes.ORDINARY_LOAD);
         shop.getCoffee("f", CoffeeState.BEANS);

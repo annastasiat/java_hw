@@ -1,7 +1,7 @@
 package ua.training.model.entity;
 
+import ua.training.exception.NoProductExistException;
 import ua.training.exception.NoProductLeftException;
-import ua.training.exception.NoRecordInDBException;
 
 import java.util.*;
 
@@ -33,7 +33,7 @@ public class CoffeeShop implements Shop {
     /**
      * Получение кофе из всех продуктов
      *
-     * @return Список записей из DBCoffeeShop, поле Product которого имеет тип Coffee
+     * @return Список записей типа Coffee
      * @see Coffee
      */
     public List<Product> getCoffeeProducts() {
@@ -51,7 +51,7 @@ public class CoffeeShop implements Shop {
      *
      * @param minPrice нижняя граница диапазона цены (в копейках)
      * @param maxPrice верхняя граница диапазона цены (в копейках)
-     * @return Список записей из DBCoffeeShop, поле Product которого имеет тип Coffee с ценой в заданном диапазоне
+     * @return Список записей типа Coffee с ценой в заданном диапазоне
      * @see Coffee
      */
     public List<Product> getCoffeeByPriceRange(int minPrice, int maxPrice) {
@@ -70,7 +70,7 @@ public class CoffeeShop implements Shop {
      *
      * @param minAmount нижняя граница диапазона
      * @param maxAmount верхняя граница диапазона
-     * @return Список записей из DBCoffeeShop, поле Product которого имеет тип Coffee,
+     * @return Список записей типа Coffee с количеством в заданном диапазоне
      * @see Coffee
      */
     public List<Product> getCoffeeByAmountRange(int minAmount, int maxAmount) {
@@ -84,17 +84,17 @@ public class CoffeeShop implements Shop {
     }
 
     /**
-     * @return Отсортированный список записей из DBCoffeeShop в соответствии с соотношением цена - вес
+     * @return Отсортированный список записей в соответствии с соотношением цена - вес
      */
     public List<Product> sortByPriceAndWeight() {
         List<Product> sortedProducts = getCoffeeProducts();
         sortedProducts.sort(Comparator.comparingDouble(x ->
-                (double) ((Coffee) x).getWeightPerPiece() / x.getPrice()));
+                (double) x.getPrice() / ((Coffee) x).getWeightPerPiece()));
         return sortedProducts;
     }
 
     /**
-     * @param product запись пробукта в DBCoffeeShop
+     * @param product пробукт
      * @param amount  количество
      * @return доступен ли данный продукт в данном количестве
      */
@@ -106,12 +106,12 @@ public class CoffeeShop implements Shop {
     /**
      * @param origin      происходжение кофе
      * @param coffeeState состояние кофе
-     * @return запись в DBCoffeeShop кофе
-     * @throws NoRecordInDBException запись с такими параметрами не найдена
+     * @return продукт с данными значениями параметров
+     * @throws NoProductExistException запись с такими параметрами не найдена
      * @see CoffeeState
-     * @see NoRecordInDBException
+     * @see NoProductExistException
      */
-    public Product getCoffee(String origin, CoffeeState coffeeState) throws NoRecordInDBException {
+    public Product getCoffee(String origin, CoffeeState coffeeState) throws NoProductExistException {
         for (Product product : getCoffeeProducts()) {
             Coffee coffee = (Coffee) product;
             if (coffee.getOrigin().equalsIgnoreCase(origin) &&
@@ -119,15 +119,15 @@ public class CoffeeShop implements Shop {
                 return product;
             }
         }
-        throw new NoRecordInDBException();
+        throw new NoProductExistException();
     }
 
     /**
      * Добавляет деньги в кассу, уменьшает количество продаваемого продукта
      *
-     * @param product запись пробукта в DBCoffeeShop
+     * @param product пробукт
      * @param amount  количество для продажи
-     * @throws NoProductLeftException количество продукта в DBCoffeeShop меньше требуемого
+     * @throws NoProductLeftException количество продукта меньше требуемого
      * @see NoProductLeftException
      */
     public void sell(Product product, int amount) throws NoProductLeftException {

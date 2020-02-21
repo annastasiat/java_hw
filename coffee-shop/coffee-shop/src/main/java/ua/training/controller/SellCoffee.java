@@ -55,7 +55,7 @@ public class SellCoffee {
 
         try {
             return shop.getCoffee(order[0], CoffeeState.valueOf(order[1].toUpperCase()));
-        } catch (NoRecordInDBException e) {
+        } catch (NoProductExistException e) {
             view.printMessage(View.bundle.getString(MessageConstants.NO_SUCH_PRODUCT));
             return getOrderRecord();
         }
